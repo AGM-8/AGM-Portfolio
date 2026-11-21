@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Artwork — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+  <link rel="stylesheet" href="css/sketchbook.css">
+</head>
+<body data-page="artwork">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">05 — Sketchbook</span>
+      <h1 class="page-title">Artwork</h1>
+      <p class="page-lede">Graphic design, logos, illustrations, drawings and other art and design work — open the sketchbook and turn the pages.</p>
+    </header>
+
+    <section class="wrap sb-section">
+      <div class="sb-toolbar">
+        <div class="sb-chips" role="group" aria-label="Filter artwork">
+          <button class="sb-chip active" data-filter="all" type="button">All</button>
+          <button class="sb-chip" data-filter="graphic" type="button">Graphic Designing</button>
+          <button class="sb-chip" data-filter="logos" type="button">Logos</button>
+          <button class="sb-chip" data-filter="illustrations" type="button">Illustrations</button>
+          <button class="sb-chip" data-filter="drawings" type="button">Drawings</button>
+        </div>
+        <p class="sb-hint">Scroll, swipe or tap a page to turn it</p>
+      </div>
+
+      <!--
+        HOW TO ADD ARTWORK
+        Tap the square "+" button (or the dashed "Add artwork" page inside the book), enter the password, and paste a
+        Google Drive folder or picture link (shared as "Anyone with the link"). The pictures appear in the book.
+        To show links to EVERY visitor, list them here:
+      -->
+      <script>
+        window.AGM_DRIVE_LINKS = [
+        "https://drive.google.com/drive/folders/1RzGfch4Xl6ZUVh2jUwTL_ww76WF19Y97"
+      ];
+      </script>
+      <div class="sb-stage" id="sbStage" tabindex="0" aria-label="Sketchbook. Use the arrow keys, scroll, swipe or tap to turn pages.">
+        <button class="sb-nav" id="sbPrev" type="button" aria-label="Previous page">&#8249;</button>
+        <div class="sb-clip" id="sbClip">
+          <div class="sb-book" id="sbBook"></div>
+        </div>
+        <button class="sb-nav" id="sbNext" type="button" aria-label="Next page">&#8250;</button>
+        
+        <div class="sb-status" id="sbStatus" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- upload dialog -->
+  <div class="sb-modal" id="sbModal" hidden role="dialog" aria-modal="true" aria-labelledby="sbModalTitle">
+    <div class="sb-sheet">
+      <header>
+        <h2 id="sbModalTitle">Add artwork from Google Drive</h2>
+        <button class="sb-x" type="button" data-close aria-label="Close">&times;</button>
+      </header>
+      <div class="sb-body">
+        <p class="sb-hint" style="margin:0 0 12px">Paste a Google Drive <b>folder</b> or <b>picture</b> link, shared as “Anyone with the link”. You can add as many links as you like.</p>
+        <div class="sb-fields">
+          <input class="full" id="sbLink" type="url" placeholder="https://drive.google.com/drive/folders/…" aria-label="Google Drive link">
+          <input class="full" id="sbName" type="text" maxlength="60" placeholder="Name (optional)" aria-label="Name">
+          <select id="sbMedium" aria-label="Category"><option value="graphic">Graphic Designing</option><option value="logos">Logos</option><option value="illustrations">Illustrations</option><option value="drawings">Drawings</option></select>
+          <input id="sbYear" type="text" inputmode="numeric" maxlength="4" placeholder="Year" aria-label="Year">
+        </div>
+        <p class="sb-hint" id="sbErr" role="alert" style="color:#ff9bb0;min-height:1.3em;margin:10px 0 0"></p>
+        <h3 style="margin:16px 0 8px;font:italic 600 1.2rem 'Cormorant Garamond',serif">Added by you</h3>
+        <ul class="sb-queue" id="sbLinks" style="margin-top:0"></ul>
+        <p class="sb-hint" style="margin:10px 0 0">Links added here are saved in <b>this browser only</b>. To show a link to every visitor, add it to <code>AGM_DRIVE_LINKS</code> in <code>artwork.html</code>.</p>
+      </div>
+      <footer>
+        <button class="sb-btn ghost" type="button" data-close>Close</button>
+        <button class="sb-btn" type="button" id="sbSave">Add to sketchbook</button>
+      </footer>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/drive-config.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/owner.js"></script>
+  <script src="js/sketchbook.js"></script>
+  <script src="js/music.js"></script>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AGM — AlpaGanga Movies</title>
+  <meta name="description" content="AGM — AlpaGanga Movies. A creative showcase.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- AGM uses BBH Hegarty (Google Fonts) -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&family=Syncopate:wght@700&family=BBH+Hegarty&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Short opening: the horizontal line disappears as soon as the curtains start to open */
+    .curtain .ct, .curtain .cb { transition-delay: 0s !important; animation-delay: 0s !important; }
+    .curtain .seam { transition: opacity .15s ease !important; }
+    .curtain.go .seam { opacity: 0 !important; animation: none !important; }
+
+    /* Opening quote on a black screen (sits above the curtains until they open) */
+    .quote { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; padding: 24px; text-align: center; pointer-events: none; background: transparent; transition: opacity .9s ease; }
+    .quote.out { opacity: 0; }
+    .quote p { margin: 0; color: #fff; font: 300 clamp(22px, 3.6vw, 46px)/1.5 "Manrope", system-ui, sans-serif; letter-spacing: .01em; text-shadow: 0 0 10px rgba(255,255,255,.55), 0 0 26px rgba(170,195,255,.38), 0 0 54px rgba(120,150,235,.22); }
+    .quote .w { display: inline-block; opacity: 0; animation: qWord 1.2s ease forwards; }
+    @keyframes qWord { to { opacity: 1; } }
+    .quote.gone { display: none; }
+  </style>
+</head>
+<body data-page="intro">
+
+  <!-- Cinema curtains (open horizontally from the middle) -->
+  <div class="quote" id="quote"><p id="quote-text"></p></div>
+  <div class="curtain" id="curtain" aria-hidden="true"><i class="ct"></i><i class="cb"></i><span class="seam"></span></div>
+
+  <!-- INTRO PAGE: only the title and the Enter button. The real site starts at home.html -->
+  <section class="landing" id="landing">
+    <!-- Closing Plasma background (settings live in js/main.js) -->
+    <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+    <div class="vignette"></div>
+
+    <div class="landing-inner">
+      <div class="signature-host sig-agm" id="sig-agm" aria-label="AGM"></div>
+      <div class="signature-host sig-full" id="sig-full" aria-label="Alpa Ganga Movies"></div>
+
+      <a class="btn enter" href="home.html">Enter showcase →</a>
+    </div>
+  </section>
+
+  <script src="js/plasma.js"></script>
+  <script src="js/signature.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var landing = document.getElementById("landing");
+      var agm = document.getElementById("sig-agm");
+      var full = document.getElementById("sig-full");
+      var vw = window.innerWidth;
+
+      /* ---- Settings you can tweak ---- */
+      var AGM_SIZE  = Math.max(110, Math.min(260, vw * 0.26));   // big "AGM"
+      var FULL_SIZE = Math.max(40,  Math.min(88,  vw * 0.07));   // small full form
+      var AGM_FONT  = "'BBH Hegarty', 'BBH Sans Hegarty', 'Syncopate', sans-serif";
+      var FULL_FONT = "'Cookie', 'Mrs Saint Delafield', cursive";
+
+      /* ---- Opening quote: black screen, words fade in one by one (takes about 9 seconds), then the screen opens ---- */
+      var LINES = ["Art should comfort the disturbed,", "and disturb the comfortable."];
+      var WORD_START = 0.7, WORD_GAP = 0.6;      // seconds: first word, gap between words
+      var OPEN_AT = 9200;                         // ms: when the quote fades and the screen splits open
+      var qEl = document.getElementById("quote"), qText = document.getElementById("quote-text"), n = 0;
+      LINES.forEach(function (line, li) {
+        if (li) qText.appendChild(document.createElement("br"));
+        line.split(" ").forEach(function (word, wi, arr) {
+          var s = document.createElement("span"); s.className = "w"; s.textContent = word;
+          s.style.animationDelay = (WORD_START + n * WORD_GAP).toFixed(2) + "s"; n++;
+          qText.appendChild(s); if (wi < arr.length - 1) qText.appendChild(document.createTextNode(" "));
+        });
+      });
+      var cur = document.getElementById('curtain');
+      setTimeout(function () { qEl.classList.add("out"); }, OPEN_AT - 900);
+      setTimeout(function () { cur.classList.add('go'); qEl.classList.add("gone"); }, OPEN_AT);
+      setTimeout(function(){ cur.classList.add('done'); }, OPEN_AT + 2200);
+      var T0 = OPEN_AT + 1400; // curtains are mostly open by now
+
+      // 1) AGM writes itself
+      setTimeout(function(){ AGMSignature.init(agm, {
+        text: "AGM", fontSize: AGM_SIZE, duration: 2, fontFamily: AGM_FONT,
+        letterSpacing: AGM_SIZE * 0.01, strokeWidth: 2, delay: 0.3
+      }); }, T0);
+
+      // 2) the full form follows as AGM finishes
+      setTimeout(function () {
+        AGMSignature.init(full, {
+          text: "Alpa Ganga Movies", fontSize: FULL_SIZE, duration: 2.2, delay: 0.1, fontFamily: FULL_FONT, wordSpacing: FULL_SIZE * 0.22
+        });
+      }, T0 + 2300);
+
+      // 3) the Enter button appears once everything is written
+      full.addEventListener("signature:complete", function () { landing.classList.add("ready"); });
+      setTimeout(function () { landing.classList.add("ready"); }, OPEN_AT + 11000); // safety net
+    })();
+  </script>
+  <script src="js/drive-config.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/music.js"></script>
+</body>
+</html>

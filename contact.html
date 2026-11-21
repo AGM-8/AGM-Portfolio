@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Contact — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+</head>
+<body data-page="contact">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">08 — Say hello</span>
+      <h1 class="page-title">Contact</h1>
+      <p class="page-lede">Collaborations, commissions or just a kind word — I'd love to hear from you.</p>
+    </header>
+
+    <section class="wrap contact">
+      <!--
+        The form opens the visitor's email app with the message filled in (no server needed).
+        Change YOUR_EMAIL@example.com below to your real address.
+      -->
+      <form class="contact-card reveal" id="contact-form">
+        <h2>Send a message</h2>
+        <p class="note">Fill this in and your email app will open, ready to send.</p>
+        <div class="field"><label for="name">Name</label><input id="name" name="name" type="text" required autocomplete="name"></div>
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+        <div class="field">
+          <label for="topic">Topic</label>
+          <select id="topic" name="topic">
+            <option>Collaboration</option><option>Commission</option><option>Feedback</option><option>Something else</option>
+          </select>
+        </div>
+        <div class="field"><label for="message">Message</label><textarea id="message" name="message" required></textarea></div>
+        <button class="btn solid" type="submit">Send message →</button>
+      </form>
+
+      <div class="contact-card reveal">
+        <h2>Find me elsewhere</h2>
+        <p class="note">Replace each # with your real profile link.</p>
+        <ul class="links">
+          <li><a href="mailto:YOUR_EMAIL@example.com"><span>Email</span><span>↗</span></a></li>
+          <li><a href="#" target="_blank" rel="noopener"><span>Instagram</span><span>↗</span></a></li>
+          <li><a href="#" target="_blank" rel="noopener"><span>YouTube</span><span>↗</span></a></li>
+          <li><a href="#" target="_blank" rel="noopener"><span>Behance</span><span>↗</span></a></li>
+          <li><a href="#" target="_blank" rel="noopener"><span>LinkedIn</span><span>↗</span></a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/owner.js"></script>
+  <script>
+    /* "+" on this page: add a link under "Find me elsewhere". */
+    var ul = document.querySelector(".links"), mine = [];
+    AGMOwner.init({
+      page: "contact", noun: "links", title: "Add a link", button: "Add link", aria: "Add a link (owner only)", titleFromFile: false,
+      note: "Adds a new line under “Find me elsewhere”.",
+      permanent: "To show a link to everyone, add a line to the list in <code>contact.html</code>.",
+      fields: [
+        { name: "title", label: "Name", placeholder: "Vimeo" },
+        { name: "url", type: "url", label: "Link", max: 300, placeholder: "https://…" }
+      ],
+      render: function (recs) {
+        mine.forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); }); mine = [];
+        recs.forEach(function (r) {
+          if (!/^(https?:|mailto:)/i.test(r.url)) return;
+          var li = document.createElement("li");
+          li.innerHTML = '<a target="_blank" rel="noopener"><span></span><span>↗</span></a>';
+          li.firstChild.href = r.url; li.firstChild.firstChild.textContent = r.title;
+          ul.appendChild(li); mine.push(li);
+        });
+      }
+    });
+  </script>
+  <script>
+    document.getElementById("contact-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+      var f = e.target, to = "YOUR_EMAIL@example.com";
+      var subject = encodeURIComponent("[" + f.topic.value + "] from " + f.name.value);
+      var body = encodeURIComponent(f.message.value + "\n\n— " + f.name.value + " (" + f.email.value + ")");
+      window.location.href = "mailto:" + to + "?subject=" + subject + "&body=" + body;
+    });
+  </script>
+  <script src="js/drive-config.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/music.js"></script>
+</body>
+</html>

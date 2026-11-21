@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Photography — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+  <link rel="stylesheet" href="css/photography.css">
+</head>
+<body data-page="photography">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">02 — Stills</span>
+      <h1 class="page-title">Photography</h1>
+      <p class="page-lede">Quiet frames, strangers, streets and skies. Drag to glide through the row — a liquid-glass lens bends each frame as it passes — and click a photo to bring it into focus.</p>
+    </header>
+
+    <!--
+      YOUR PERMANENT PHOTOS (visible to every visitor)
+      1. Put the full-quality photo in assets/photography/  (for example assets/photography/street-01.jpg).
+      2. Optional but recommended: put a smaller copy (about 800px on the long side) in assets/photography/thumbs/
+         with the same name. The grid uses it so the page stays fast; the full-size viewer always opens the original.
+         If you skip "thumb", the grid simply uses the original file.
+      3. Add (or replace) a line below:  { src: "…", thumb: "…", title: "…", meta: "Place · year" },
+      Leave the list empty to show only photos added with the "+" button.
+      The "+" button at the bottom right adds photos without touching this file — but those are saved
+      only in the browser you add them in (see the note inside the + panel).
+    -->
+    <script>
+      window.AGM_PHOTOS = [];
+    </script>
+
+    <!--
+      YOUR GOOGLE DRIVE PHOTOS (visible to every visitor)
+      List Drive folder / photo links here — the carousel shows every picture inside them, directly.
+      Each must be shared as "Anyone with the link → Viewer". New pictures dropped into a listed folder appear on their own.
+      The "+" button adds more links the same way, but only in the browser you add them in.
+    -->
+    <script>
+      window.AGM_DRIVE_LINKS = [
+        "https://drive.google.com/drive/folders/1A9tOdhdaPIA0cymhR-RyJLwwy7pVRSLI"
+      ];
+    </script>
+
+    <section class="fg" id="fg" aria-label="Photography carousel">
+      <div class="fg-stage" tabindex="0" aria-label="Photo carousel. Drag, swipe or use the left and right arrow keys to move; press Enter to focus the centred photo."></div>
+      <div class="fg-empty" hidden>Nothing here yet — tap the <b>+</b> button to add your first photo.</div>
+      <div class="lg-title" aria-live="polite" hidden></div>
+      <div class="lg-count" hidden></div>
+      <button class="lg-full" type="button" hidden>View full size</button>
+    </section>
+  </main>
+
+  <!-- Owner "+" button -->
+  <button class="ec-add" type="button" aria-label="Add photos (owner only)" title="Add photos (owner only)">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- Password prompt -->
+  <div class="ec-modal" id="pg-gate" hidden>
+    <div class="ec-card sm" role="dialog" aria-modal="true" aria-labelledby="pg-gate-t">
+      <button class="ec-x" type="button" data-close aria-label="Close">×</button>
+      <h2 id="pg-gate-t">Owner access</h2>
+      <p class="ec-note">Enter the password to add or remove photos.</p>
+      <form id="pg-gate-form" autocomplete="off">
+        <div class="field"><label for="pg-pw">Password</label><input id="pg-pw" type="password" autocomplete="off" required></div>
+        <p class="ec-err" id="pg-gate-err" role="alert"></p>
+        <button class="btn solid" type="submit">Unlock</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add / manage panel (opens only after the password is accepted) -->
+  <div class="ec-modal" id="pg-manage" hidden>
+    <div class="ec-card" role="dialog" aria-modal="true" aria-labelledby="pg-manage-t">
+      <button class="ec-x" type="button" data-close aria-label="Close">×</button>
+      <h2 id="pg-manage-t">Add photos from Google Drive</h2>
+      <p class="ec-note">Paste a Google Drive <b>folder</b> or <b>photo</b> link, shared as “Anyone with the link”. Every photo in it appears in the carousel. You can add as many links as you like.</p>
+      <form id="pg-form" autocomplete="off">
+        <div class="field"><label for="pg-link">Google Drive link</label><input id="pg-link" type="url" maxlength="400" placeholder="https://drive.google.com/drive/folders/…" required></div>
+        <div class="field"><label for="pg-title">Name <small>(optional — shown in this list and as a caption)</small></label><input id="pg-title" type="text" maxlength="80"></div>
+        <p class="ec-err" id="pg-form-err" role="alert"></p>
+        <div class="ec-actions"><button class="btn solid" type="submit" id="pg-save">Add link</button><span id="pg-status" role="status"></span></div>
+      </form>
+
+      <div class="ec-added">
+        <h3>Added by you</h3>
+        <ul class="pg-list" id="pg-list"></ul>
+        <p class="ec-note" style="margin:0">Links added here are saved in <b>this browser only</b>, so other visitors won't see the change. To show a link to everyone, add it to <code>AGM_DRIVE_LINKS</code> in <code>photography.html</code>.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-size viewer -->
+  <div class="ec-modal ec-viewer pg-viewer" id="pg-viewer" hidden>
+    <div class="ec-card" role="dialog" aria-modal="true" aria-label="Photo viewer">
+      <button class="ec-x" type="button" data-close aria-label="Close">×</button>
+      <div class="pg-frame">
+        <img alt="">
+        <button class="wheel-btn pg-nav pg-prev" type="button" aria-label="Previous photo">←</button>
+        <button class="wheel-btn pg-nav pg-next" type="button" aria-label="Next photo">→</button>
+      </div>
+      <h2></h2>
+      <p></p>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/drive-config.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/liquid-glass-carousel.js"></script>
+  <script src="js/music.js"></script>
+</body>
+</html>

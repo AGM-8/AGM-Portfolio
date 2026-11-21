@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shots — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+  <link rel="stylesheet" href="css/shots.css">
+</head>
+<body data-page="shots">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">01 — Cinematography</span>
+      <h1 class="page-title">Shots</h1>
+      <p class="page-lede">Moving frames from my films. Drag the row or use the arrows, and tap the centre card to play it.</p>
+    </header>
+
+    <!--
+      YOUR VIDEOS (visible to every visitor)
+      List Google Drive video / folder-of-videos links below (each shared as "Anyone with the link → Viewer").
+      Every video inside appears as a card; new videos dropped into a listed folder appear on their own.
+      The "+" button adds more links the same way, but only in the browser you add them in.
+    -->
+    <script>
+      window.AGM_DRIVE_LINKS = [
+        "https://drive.google.com/drive/folders/10fBZ72NAvWUS2Tt7AvN8EVsoMWn5SLJU"
+      ];
+    </script>
+
+    <section class="sf" id="sf" aria-roledescription="carousel" aria-label="Shots">
+      <div class="sf-stage" tabindex="0" aria-label="Shots. Drag, swipe or use the left and right arrow keys; press Enter to play the centre video."></div>
+      <div class="sf-ui">
+        <button class="wheel-btn sf-prev" type="button" aria-label="Previous video">←</button>
+        <span class="sf-count" aria-live="polite"></span>
+        <button class="wheel-btn sf-next" type="button" aria-label="Next video">→</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/drive-config.js"></script>
+  <script src="js/drive.js"></script>
+  <script src="js/owner.js"></script>
+  <script src="js/shots-flow.js"></script>
+  <script src="js/music.js"></script>
+</body>
+</html>
