@@ -1,6 +1,0 @@
-Place your two font files in this folder, named exactly:
-
-  Lovelo.woff2   (or Lovelo.woff / Lovelo.otf / Lovelo.ttf)      -> used for "AGM"
-  Signeton.woff2 (or Signeton.woff / Signeton.otf / Signeton.ttf) -> used for "AlpaGanga Movies"
-
-One format of each is enough. If a file is missing the site shows a similar fallback font.
