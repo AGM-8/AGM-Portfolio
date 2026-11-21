@@ -10,7 +10,7 @@ body[data-page="photography"] .page-lede { margin-top: 8px; font-size: clamp(14p
 
 /* ---------- Liquid glass carousel ---------- */
 .fg {
-  position: relative; width: min(1400px, calc(100% - 32px)); margin: 0 auto 36px;
+  position: relative; width: min(1760px, calc(100% - 32px)); margin: 0 auto 36px;
   height: clamp(440px, calc(100svh - var(--nav-h) - 190px), 900px);
   background: #0d0f1a; border-radius: 18px; overflow: hidden; color: #f2efe6;
   box-shadow: 0 30px 70px -40px rgba(0,0,0,.85), 0 0 0 1px rgba(160,180,230,.14);
