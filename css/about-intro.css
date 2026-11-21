@@ -1,0 +1,109 @@
+/* About page: photo fade-in, ripple canvas, scroll reveal.
+   Loaded AFTER style.css and edits.css. All classes are prefixed "ai-". */
+
+:root { --ai-h: calc(100vh - var(--nav-h, 68px)); --ai-side: clamp(16px, 5vw, 72px); --ai-radius: clamp(18px, 2.4vw, 32px); }
+@supports (height: 100svh) { :root { --ai-h: calc(100svh - var(--nav-h, 68px)); } }
+
+.ai-wrap { position: relative; --a: 0; --b: 0; }  /* a = photo rises, b = photo blurs out */
+
+/* ---------- Sticky stage: header + rounded photo ---------- */
+.ai-stage {
+  position: sticky; top: var(--nav-h, 68px);
+  height: var(--ai-h);
+  display: flex; flex-direction: column;
+  padding: 14px var(--ai-side) clamp(10px, 2vh, 20px);   /* the stage already starts below the top bar */
+  box-sizing: border-box;
+  overflow: hidden;            /* ripple bulge stays inside the stage */
+}
+
+.ai-head {
+  margin: 0 0 clamp(10px, 2vh, 20px);
+  font: 600 clamp(40px, 6.5vw, 78px)/1 "Cormorant Garamond", Georgia, serif;
+  letter-spacing: -.01em;
+  color: #f3efe6;
+  opacity: calc(1 - var(--a) * 1.3);
+  animation: aiIn 1.2s ease-out .15s backwards;
+  transform: translateY(calc(var(--a) * -18vh));
+}
+
+/* photo box: margins on both sides come from the stage padding */
+.ai-head.ai-float { position: absolute; left: 0; right: 0; top: 50%; margin: 0; text-align: center; z-index: 3;
+  opacity: calc(1 - var(--a) * 2.2); transform: translateY(calc(-50% + var(--a) * -14vh)); }
+.ai-photo-box {
+  position: relative; flex: 1; min-height: 0;
+  border-radius: var(--ai-radius);
+  animation: aiIn 1.6s ease-out .35s backwards;
+  transform: translateY(calc((1 - var(--a)) * var(--ai-h)));   /* photo scrolls up from below to its full place */
+}
+@keyframes aiIn { from { opacity: 0; } }
+
+/* fallback <img> (shown if WebGL is unavailable) */
+.ai-photo {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain;
+  border-radius: inherit;
+}
+.ai-gl .ai-photo { visibility: hidden; }
+
+/* ripple canvas: extends past the photo so the bulge can spill over its edge */
+.ai-canvas {
+  position: absolute; display: none; max-width: none; max-height: none;
+  left: calc(var(--pad, 0px) * -1); top: calc(var(--pad, 0px) * -1);
+  touch-action: pan-y;
+}
+.ai-gl .ai-canvas { display: block; }
+
+.ai-photo, .ai-canvas {
+  filter: blur(calc(var(--b) * 20px));
+  will-change: filter;
+}
+
+/* darkens as the text takes over */
+.ai-veil {
+  position: absolute; inset: 0; border-radius: inherit;
+  background: rgba(10, 12, 26, .85);
+  opacity: calc(var(--b) * 0.9);
+  pointer-events: none;
+}
+
+.ai-hint {
+  position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(255, 255, 255, .9);
+  font: 500 13px/1 "Manrope", system-ui, sans-serif;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .6);
+  opacity: 0; transition: opacity .6s ease;
+  pointer-events: none;
+}
+.ai-hint::after {
+  content: ""; width: 1px; height: 30px; background: currentColor;
+  transform-origin: top; animation: aiLine 1.6s ease-in-out infinite;
+}
+.ai-wrap.ai-ready .ai-hint { opacity: calc(1 - var(--a) * 3); }
+@keyframes aiLine { 0%, 100% { transform: scaleY(.3); } 50% { transform: scaleY(1); } }
+
+/* ---------- Text that scrolls up over the photo ---------- */
+.ai-text {
+  position: relative; z-index: 2;
+  margin-top: calc(var(--ai-h) * -1);
+  padding: calc(var(--ai-h) * 2.6) 24px 32vh;   /* enters only after the blur is done */
+  pointer-events: none;
+}
+.ai-text-inner {
+  max-width: 640px; margin: 0 auto;
+  color: #f3efe6; text-shadow: 0 1px 18px rgba(8, 10, 22, .6);
+  pointer-events: auto;
+}
+.ai-text h2 {
+  font: 600 clamp(38px, 6vw, 68px)/1.05 "Cormorant Garamond", Georgia, serif;
+  margin: 0 0 .6em; letter-spacing: -.01em;
+}
+.ai-text p {
+  font: 400 clamp(17px, 2.1vw, 19px)/1.8 "Manrope", system-ui, sans-serif;
+  margin: 0 0 1.4em; color: rgba(243, 239, 230, .94);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-head, .ai-photo-box { animation: none; }
+  .ai-hint::after { animation: none; }
+}
