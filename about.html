@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+</head>
+<body data-page="about">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">07 — The maker</span>
+      <h1 class="page-title">About</h1>
+    </header>
+
+    <section class="wrap about">
+      <!-- Replace the placeholder with: <img src="assets/about/portrait.jpg" alt="Your name"> -->
+      <div class="portrait reveal">
+        <div class="tile-media" style="--g1:#6b86c4;--g2:#1a1f38"><div class="placeholder-note">Add portrait</div></div>
+      </div>
+
+      <div class="reveal">
+        <h2>Hi, I'm Aagam — and this is AlpaGanga Movies.</h2>
+        <p>Write a short introduction here: who you are, where you're from, and what drives you to make things. A few honest sentences read better than a long résumé.</p>
+        <p>Then say something about your process — how an idea becomes a shot, a script, a drawing or a track — and what you want people to feel when they browse the showcase.</p>
+
+        <div class="facts">
+          <div class="fact"><b>6</b><span>Disciplines</span></div>
+          <div class="fact"><b>00</b><span>Projects</span></div>
+          <div class="fact"><b>00</b><span>Years creating</span></div>
+        </div>
+
+        <h2 style="font-size:28px;margin-bottom:6px">Tools &amp; craft</h2>
+        <ul class="skills">
+          <li>Cinematography</li><li>Colour grading</li><li>Video editing</li>
+          <li>Photography</li><li>Screenwriting</li><li>Illustration</li><li>Music</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/owner.js"></script>
+  <script>
+    /* "+" on this page: set your portrait (one photo, original quality). */
+    var holder = document.querySelector(".portrait .tile-media"), original = holder.innerHTML;
+    AGMOwner.init({
+      page: "about", noun: "your portrait", title: "Set your portrait", button: "Use this photo", aria: "Set your portrait (owner only)", single: true,
+      note: "Choose one photo. It replaces the placeholder (and any earlier portrait).",
+      permanent: "To show it to everyone, put the picture in <code>assets/about/</code> and use the line in the comment above the portrait.",
+      fields: [ { name: "file", type: "file", label: "Photo", accept: "image/*" } ],
+      label: function (r) { return r.fileName || "Portrait"; },
+      render: function (recs) {
+        var r = recs[recs.length - 1];
+        holder.innerHTML = r ? '<img alt="Aagam" src="' + URL.createObjectURL(r.file) + '">' : original;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap home-hero">
+      <span class="eyebrow">Home</span>
+      <h1 class="page-title home-title words" data-words>Welcome to Aagam's Portfolio</h1>
+      <p class="home-ask">What would you like to experience?</p>
+    </header>
+
+    <!--
+      WHEEL CAROUSEL — every card is a link to its own page.
+      • Drag / swipe / arrow keys rotate the wheel; clicking the front card opens it.
+      • To add a cover picture to a card, put an image in assets/covers/ and add inside its .wheel-media:
+          <img src="assets/covers/shots.jpg" alt="">
+      • To add another card, copy one <a class="wheel-item"> block and change href, data-label, data-desc and the text.
+    -->
+    <section class="wheel" id="wheel" tabindex="0" aria-roledescription="carousel" aria-label="Portfolio sections. Drag, swipe or use the arrow keys.">
+      <div class="wheel-stage">
+        <a class="wheel-item" href="shots.html" data-label="Shots" data-desc="Frames pulled from my films." style="--g1:#6b86c4;--g2:#1a1f38">
+          <span class="wheel-media"></span><span class="wheel-num">01</span><span class="wheel-name">Shots</span>
+        </a>
+        <a class="wheel-item" href="photography.html" data-label="Photography" data-desc="Stills, streets and skies." style="--g1:#4a6191;--g2:#10131f">
+          <span class="wheel-media"></span><span class="wheel-num">02</span><span class="wheel-name">Photography</span>
+        </a>
+        <a class="wheel-item" href="cinematic-edits.html" data-label="Cinematic Edits" data-desc="Cuts, colour and rhythm." style="--g1:#7d96d0;--g2:#262d52">
+          <span class="wheel-media"></span><span class="wheel-num">03</span><span class="wheel-name">Cinematic Edits</span>
+        </a>
+        <a class="wheel-item" href="scripts.html" data-label="Scripts" data-desc="Stories on the page." style="--g1:#3b4f82;--g2:#0d0d14">
+          <span class="wheel-media"></span><span class="wheel-num">04</span><span class="wheel-name">Scripts</span>
+        </a>
+        <a class="wheel-item" href="artwork.html" data-label="Artwork" data-desc="Design, logos, illustration and drawings." style="--g1:#8fa6d6;--g2:#1f2540">
+          <span class="wheel-media"></span><span class="wheel-num">05</span><span class="wheel-name">Artwork</span>
+        </a>
+        <a class="wheel-item" href="music.html" data-label="Music" data-desc="Compositions and soundscapes." style="--g1:#5a78b8;--g2:#151a30">
+          <span class="wheel-media"></span><span class="wheel-num">06</span><span class="wheel-name">Music</span>
+        </a>
+        <a class="wheel-item" href="about.html" data-label="About" data-desc="The maker behind it all." style="--g1:#6b86c4;--g2:#262d52">
+          <span class="wheel-media"></span><span class="wheel-num">07</span><span class="wheel-name">About</span>
+        </a>
+        <a class="wheel-item" href="contact.html" data-label="Contact" data-desc="Collaborate or say hello." style="--g1:#4a6191;--g2:#1a1f38">
+          <span class="wheel-media"></span><span class="wheel-num">08</span><span class="wheel-name">Contact</span>
+        </a>
+      </div>
+
+      <div class="wheel-ui">
+        <button class="wheel-btn wheel-prev" type="button" aria-label="Previous section">←</button>
+        <div class="wheel-caption" aria-live="polite">
+          <span class="wheel-count">01 / 08</span>
+          <h2 class="wheel-label">Shots</h2>
+          <p class="wheel-desc"><span class="wheel-desc-text">Frames pulled from my films.</span> <a class="wheel-open" href="shots.html">Open →</a></p>
+        </div>
+        <button class="wheel-btn wheel-next" type="button" aria-label="Next section">→</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/wheel.js"></script>
+  <script>AGMWheel.init(document.getElementById("wheel"), { start: 0 });</script>
+</body>
+</html>

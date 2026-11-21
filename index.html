@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AGM — AlpaGanga Movies</title>
+  <meta name="description" content="AGM — AlpaGanga Movies. A creative showcase.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Syncopate is only a stand-in until Lovelo.* is placed in assets/fonts/ -->
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&family=Syncopate:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="intro">
+
+  <!-- Cinema curtains (open horizontally from the middle) -->
+  <div class="curtain" id="curtain" aria-hidden="true"><i class="ct"></i><i class="cb"></i><span class="seam"></span></div>
+
+  <!-- INTRO PAGE: only the title and the Enter button. The real site starts at home.html -->
+  <section class="landing" id="landing">
+    <!-- Closing Plasma background (settings live in js/main.js) -->
+    <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+    <div class="vignette"></div>
+
+    <div class="landing-inner">
+      <div class="signature-host sig-agm" id="sig-agm" aria-label="AGM"></div>
+      <div class="signature-host sig-full" id="sig-full" aria-label="Alpa Ganga Movies"></div>
+
+      <a class="btn enter" href="home.html">Enter showcase →</a>
+    </div>
+  </section>
+
+  <script src="js/plasma.js"></script>
+  <script src="js/signature.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    (function () {
+      var landing = document.getElementById("landing");
+      var agm = document.getElementById("sig-agm");
+      var full = document.getElementById("sig-full");
+      var vw = window.innerWidth;
+
+      /* ---- Settings you can tweak ---- */
+      var AGM_SIZE  = Math.max(110, Math.min(260, vw * 0.26));   // big "AGM"
+      var FULL_SIZE = Math.max(40,  Math.min(88,  vw * 0.07));   // small full form
+      var AGM_FONT  = "'Lovelo', 'Syncopate', 'Montserrat', sans-serif";
+      var FULL_FONT = "'Cookie', 'Mrs Saint Delafield', cursive";
+
+      var cur = document.getElementById('curtain');
+      requestAnimationFrame(function(){ cur.classList.add('go'); });
+      setTimeout(function(){ cur.classList.add('done'); }, 2800);
+      var T0 = 1900; // curtains are mostly open by now
+
+      // 1) AGM writes itself
+      setTimeout(function(){ AGMSignature.init(agm, {
+        text: "AGM", fontSize: AGM_SIZE, duration: 2, fontFamily: AGM_FONT,
+        letterSpacing: AGM_SIZE * 0.01, strokeWidth: 2, delay: 0.3
+      }); }, T0);
+
+      // 2) the full form follows as AGM finishes
+      setTimeout(function () {
+        AGMSignature.init(full, {
+          text: "Alpa Ganga Movies", fontSize: FULL_SIZE, duration: 2.2, delay: 0.1, fontFamily: FULL_FONT, wordSpacing: FULL_SIZE * 0.22
+        });
+      }, T0 + 2300);
+
+      // 3) the Enter button appears once everything is written
+      full.addEventListener("signature:complete", function () { landing.classList.add("ready"); });
+      setTimeout(function () { landing.classList.add("ready"); }, 11000); // safety net
+    })();
+  </script>
+</body>
+</html>

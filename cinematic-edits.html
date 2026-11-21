@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cinematic Edits — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+</head>
+<body data-page="edits">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <!-- SVG filter that bends the video edge under the glass ring (Chrome / Edge; other browsers show a plain glass ring) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <filter id="ec-refract" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.02" numOctaves="2" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="20" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">03 — Motion</span>
+      <h1 class="page-title">Cinematic Edits</h1>
+      <p class="page-lede">Cuts, colour and rhythm. Drag the glass to browse, and tap the centre edit to watch it full size with sound.</p>
+    </header>
+
+    <!--
+      YOUR PERMANENT EDITS (visible to every visitor)
+      1. Put the video file in assets/edits/  (for example assets/edits/edit-01.mp4)
+         and, optionally, a cover picture next to it (assets/edits/edit-01.jpg).
+      2. Edit the line below — or copy it to add more — so title, desc, src (and poster) match.
+         You can also use a link instead of a file:   { title: "…", desc: "…", link: "https://youtu.be/XXXXXXXXXXX" },
+      The "+" button at the bottom right adds edits too, without touching this file — but those are saved
+      only in the browser you add them in (see the note inside the + panel).
+    -->
+    <script>
+      window.AGM_EDITS = [
+        { title: "Your Cinematic Edit", desc: "Replace this with a line about the idea, the music or the software behind it.", src: "assets/edits/edit-01.mp4", poster: "assets/edits/edit-01.jpg" }
+      ];
+    </script>
+
+    <section class="ec" id="ec" aria-roledescription="carousel" aria-label="Cinematic edits">
+      <div class="ec-stage" tabindex="0" aria-label="Cinematic edits. Drag, swipe or use the arrow keys; press Enter to watch the centre edit.">
+        <div class="ec-lens" aria-hidden="true"></div>
+      </div>
+
+      <div class="ec-ui">
+        <button class="wheel-btn ec-prev" type="button" aria-label="Previous edit">←</button>
+        <div class="ec-caption" aria-live="polite">
+          <span class="ec-count"></span>
+          <h2 class="ec-label"></h2>
+          <p class="ec-desc"></p>
+          <button class="btn ec-watch" type="button">Watch ⤢</button>
+        </div>
+        <button class="wheel-btn ec-next" type="button" aria-label="Next edit">→</button>
+      </div>
+      <div class="ec-dots" aria-hidden="true"></div>
+    </section>
+  </main>
+
+  <!-- Owner "+" button -->
+  <button class="ec-add" type="button" aria-label="Add a cinematic edit (owner only)" title="Add an edit (owner only)">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+  </button>
+
+  <!-- Password prompt -->
+  <div class="ec-modal" id="ec-gate" hidden>
+    <div class="ec-card sm" role="dialog" aria-modal="true" aria-labelledby="ec-gate-t">
+      <button class="ec-x" type="button" data-close aria-label="Close">×</button>
+      <h2 id="ec-gate-t">Owner access</h2>
+      <p class="ec-note">Enter the password to add or remove cinematic edits.</p>
+      <form id="ec-gate-form" autocomplete="off">
+        <div class="field"><label for="ec-pw">Password</label><input id="ec-pw" type="password" autocomplete="off" required></div>
+        <p class="ec-err" id="ec-gate-err" role="alert"></p>
+        <button class="btn solid" type="submit">Unlock</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add / manage panel (opens only after the password is accepted) -->
+  <div class="ec-modal" id="ec-manage" hidden>
+    <div class="ec-card" role="dialog" aria-modal="true" aria-labelledby="ec-manage-t">
+      <button class="ec-x" type="button" data-close aria-label="Close">×</button>
+      <h2 id="ec-manage-t">Add a cinematic edit</h2>
+      <p class="ec-note">It joins the carousel straight away — no coding needed.</p>
+      <form id="ec-form" autocomplete="off">
+        <div class="field"><label for="ec-title">Title</label><input id="ec-title" type="text" maxlength="80" required></div>
+        <div class="field"><label for="ec-desc">Short description <small>(optional)</small></label><textarea id="ec-desc" maxlength="240" rows="2"></textarea></div>
+        <div class="ec-seg" role="group" aria-label="Video source">
+          <button type="button" class="on" data-mode="file">Upload video file</button>
+          <button type="button" data-mode="link">Paste a link</button>
+        </div>
+        <div class="field" data-pane="file"><label for="ec-file">Video file</label><input id="ec-file" type="file" accept="video/*"></div>
+        <div class="field" data-pane="link" hidden><label for="ec-link">Video link</label><input id="ec-link" type="url" placeholder="YouTube, Vimeo or a direct .mp4 link"></div>
+        <div class="field"><label for="ec-cover">Cover image <small>(optional — made automatically for uploaded files)</small></label><input id="ec-cover" type="file" accept="image/*"></div>
+        <p class="ec-err" id="ec-form-err" role="alert"></p>
+        <div class="ec-actions"><button class="btn solid" type="submit" id="ec-save">Add to carousel</button><span id="ec-status" role="status"></span></div>
+      </form>
+
+      <div class="ec-added">
+        <h3>Added by you</h3>
+        <ul id="ec-list"></ul>
+        <p class="ec-note" style="margin:0">Edits added here are saved in <b>this browser only</b>, so other visitors won't see them. To show an edit to everyone, put the file in <code>assets/edits/</code> and list it in <code>cinematic-edits.html</code> (instructions are in the comment above the carousel).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-size viewer -->
+  <div class="ec-modal ec-viewer" id="ec-viewer" hidden>
+    <div class="ec-card" role="dialog" aria-modal="true" aria-label="Video player">
+      <button class="ec-x" type="button" data-close aria-label="Close">×</button>
+      <div class="ec-frame"></div>
+      <h2></h2>
+      <p></p>
+    </div>
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/edits.js"></script>
+</body>
+</html>

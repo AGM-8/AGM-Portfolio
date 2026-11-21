@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Music — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+</head>
+<body data-page="music">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">06 — Sound</span>
+      <h1 class="page-title">Music</h1>
+      <p class="page-lede">Compositions, covers and soundscapes — the sound side of the stories.</p>
+    </header>
+
+    <section class="wrap">
+      <!--
+        HOW TO ADD A TRACK
+        Put the audio file in assets/music/ and set the <audio src="…"> below, e.g. assets/music/track-01.mp3.
+        For Spotify / SoundCloud / YouTube Music, replace the <audio> tag with their embed <iframe>.
+      -->
+      <div class="tracks">
+        <article class="track reveal">
+          <div class="track-art" style="--g1:#6b86c4;--g2:#1a1f38"></div>
+          <div>
+            <h3>Track title</h3>
+            <p class="meta">Original · Ambient · 2026</p>
+            <audio controls preload="none" src=""></audio>
+          </div>
+        </article>
+        <article class="track reveal">
+          <div class="track-art" style="--g1:#4a6191;--g2:#0d0d14"></div>
+          <div>
+            <h3>Track title</h3>
+            <p class="meta">Cover · Piano · 2026</p>
+            <audio controls preload="none" src=""></audio>
+          </div>
+        </article>
+        <article class="track reveal">
+          <div class="track-art" style="--g1:#7d96d0;--g2:#262d52"></div>
+          <div>
+            <h3>Track title</h3>
+            <p class="meta">Score · Cinematic · 2026</p>
+            <audio controls preload="none" src=""></audio>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/owner.js"></script>
+  <script>
+    /* "+" on this page: add a track (audio file kept as-is, optional cover image). */
+    var list = document.querySelector(".tracks"), mine = [];
+    AGMOwner.init({
+      page: "music", noun: "tracks", title: "Add a track", button: "Add to Music", aria: "Add a track (owner only)",
+      note: "Upload an audio file (MP3, WAV, M4A…). It is stored exactly as it is.",
+      permanent: "To show a track to everyone, put it in <code>assets/music/</code> and set its <code>&lt;audio src&gt;</code> in <code>music.html</code>.",
+      fields: [
+        { name: "file", type: "file", label: "Audio file", accept: "audio/*" },
+        { name: "title", label: "Title", optional: true },
+        { name: "meta", label: "Type · mood · year", optional: true, placeholder: "Original · Ambient · 2026" }
+      ],
+      render: function (recs) {
+        mine.forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); }); mine = [];
+        var E = AGMOwner.esc;
+        recs.slice().reverse().forEach(function (r) {
+          var a = document.createElement("article"); a.className = "track reveal in";
+          a.innerHTML = '<div class="track-art" style="--g1:#6b86c4;--g2:#1a1f38"></div><div><h3>' + E(r.title) + '</h3>' + (r.meta ? '<p class="meta">' + E(r.meta) + '</p>' : '') + '<audio controls preload="none" src="' + URL.createObjectURL(r.file) + '"></audio></div>';
+          list.insertBefore(a, list.firstChild); mine.push(a);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

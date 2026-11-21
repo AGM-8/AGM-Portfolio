@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shots — AlpaGanga Movies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Manrope:wght@400;500;600&family=Cookie&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/edits.css">
+</head>
+<body data-page="shots">
+  <canvas id="plasma" class="bg-plasma" aria-hidden="true"></canvas>
+  <div class="bg-veil"></div>
+  <div id="site-nav"></div>
+
+  <main>
+    <header class="page-hero wrap">
+      <span class="eyebrow">01 — Cinematography</span>
+      <h1 class="page-title">Shots</h1>
+      <p class="page-lede">Frames pulled from my films — compositions, light and movement, one moment at a time.</p>
+    </header>
+
+    <section class="wrap">
+      <div class="chips">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="wide">Wide</button>
+        <button class="chip" data-filter="close">Close-up</button>
+        <button class="chip" data-filter="night">Night</button>
+      </div>
+
+      <!--
+        HOW TO ADD YOUR SHOTS
+        1. Put images in assets/shots/ (e.g. assets/shots/shot-01.jpg)
+        2. In a tile below, replace the <div class="placeholder-note">…</div> line with:
+           <img src="assets/shots/shot-01.jpg" alt="Describe the shot" loading="lazy">
+        3. Change data-tags to wide / close / night (or invent your own and add a matching chip above).
+        Duplicate a whole <figure class="tile reveal">…</figure> block for more shots.
+      -->
+      <div class="masonry">
+        <figure class="tile reveal" data-tags="wide">
+          <div class="tile-media" style="--ratio:16/9;--g1:#5a78b8;--g2:#1a1f38"><div class="placeholder-note">Add shot</div></div>
+          <figcaption class="tile-cap"><span class="tile-tag">Wide</span><h3>Shot title</h3><p>Film / scene name</p></figcaption>
+        </figure>
+        <figure class="tile reveal" data-tags="close night">
+          <div class="tile-media" style="--ratio:4/5;--g1:#3b4f82;--g2:#0d0d14"><div class="placeholder-note">Add shot</div></div>
+          <figcaption class="tile-cap"><span class="tile-tag">Close-up · Night</span><h3>Shot title</h3><p>Film / scene name</p></figcaption>
+        </figure>
+        <figure class="tile reveal" data-tags="wide night">
+          <div class="tile-media" style="--ratio:3/2;--g1:#6b86c4;--g2:#262d52"><div class="placeholder-note">Add shot</div></div>
+          <figcaption class="tile-cap"><span class="tile-tag">Wide · Night</span><h3>Shot title</h3><p>Film / scene name</p></figcaption>
+        </figure>
+        <figure class="tile reveal" data-tags="close">
+          <div class="tile-media" style="--ratio:1/1;--g1:#4a6191;--g2:#151a30"><div class="placeholder-note">Add shot</div></div>
+          <figcaption class="tile-cap"><span class="tile-tag">Close-up</span><h3>Shot title</h3><p>Film / scene name</p></figcaption>
+        </figure>
+        <figure class="tile reveal" data-tags="wide">
+          <div class="tile-media" style="--ratio:2/1;--g1:#7d96d0;--g2:#1f2540"><div class="placeholder-note">Add shot</div></div>
+          <figcaption class="tile-cap"><span class="tile-tag">Wide</span><h3>Shot title</h3><p>Film / scene name</p></figcaption>
+        </figure>
+        <figure class="tile reveal" data-tags="night">
+          <div class="tile-media" style="--ratio:4/5;--g1:#2e3d68;--g2:#0a0b12"><div class="placeholder-note">Add shot</div></div>
+          <figcaption class="tile-cap"><span class="tile-tag">Night</span><h3>Shot title</h3><p>Film / scene name</p></figcaption>
+        </figure>
+      </div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="js/plasma.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dock.js"></script>
+  <script src="js/owner.js"></script>
+  <script>
+    /* "+" on this page: add your shots (kept at original quality, in this browser). */
+    var grid = document.querySelector(".masonry"), mine = [];
+    AGMOwner.init({
+      page: "shots", noun: "shots", title: "Add shots", button: "Add to Shots", aria: "Add shots (owner only)",
+      note: "Pick one or many images. They are stored exactly as they are — no resizing, no recompression.",
+      permanent: "To show a shot to everyone, put it in <code>assets/shots/</code> and add it to <code>shots.html</code>.",
+      fields: [
+        { name: "file", type: "file", label: "Images", accept: "image/*", multiple: true },
+        { name: "title", label: "Title", optional: true },
+        { name: "tag", type: "select", label: "Type", options: [["wide","Wide"],["close","Close-up"],["night","Night"]] },
+        { name: "desc", label: "Film / scene name", optional: true }
+      ],
+      render: function (recs) {
+        mine.forEach(function (n) { if (n.parentNode) n.parentNode.removeChild(n); }); mine = [];
+        recs.forEach(function (r) {
+          var f = document.createElement("figure"), u = URL.createObjectURL(r.file), nm = { wide: "Wide", close: "Close-up", night: "Night" }[r.tag] || "Shot";
+          f.className = "tile reveal in"; f.setAttribute("data-tags", r.tag);
+          f.innerHTML = '<div class="tile-media" style="--ratio:3/2"><img alt="' + AGMOwner.esc(r.title) + '" src="' + u + '"></div><figcaption class="tile-cap"><span class="tile-tag">' + nm + '</span><h3>' + AGMOwner.esc(r.title) + '</h3><p>' + AGMOwner.esc(r.desc) + '</p></figcaption>';
+          grid.insertBefore(f, grid.firstChild); mine.push(f);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
